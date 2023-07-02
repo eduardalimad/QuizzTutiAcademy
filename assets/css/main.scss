@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  //responsive font
+  html {
+    
+    @media(max-width: 1080px) {
+      font-size: 93.75%;
+      //16*0,9373= 15px
+    }
+  
+    @media(max-width: 768px) {
+      font-size: 87.5%;
+      //16*0,875 = 14px
+    }
+  }
+  
+  :root {
+    /* colors */
+    --white: #FFFFFF;
+    --bg: #F9F9F9;
+    --green_base: #10b981;
+    --bgProcess: #c9c9c9;
+    --orange_base: #fb923c;
+    --gray: #DCDCDC;
+    --gray_text: #868686;
+    --gray_text: #c8d6e5;
+    --black_text: #220931;
+    --red_base: #ef4444;
+    --blue_base: #0ea5e9;
+  
+    --gradient-green: linear-gradient(360deg, var(--green) 0, #466451 116%);
+  
+    /* border radius */
+    --radius: 0.625rem;
+    --circuleRadius: 50%;
+  
+    /* shadow */
+    --shadow: 0px 0px 1rem #d2d2d2a6;
+  
+    /* padding */
+    --paddingInput: .5rem;
+    --negativeSpace: 2vw;
+    /* weight */
+    --bold: 600;
+    --regular: 400;
+  
+    // print out
+    --border_print: 2px solid var(--black_text);
+  }
+
+  [data-theme="darkMode"]{
+    --white: #232323;
+    --green_base: #2E2E2E;
+    --bg: #000000;
+    --black_text: #e6e9e4;
+    --gray: #54595c;
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #19b595;
+
+    color: var(--black_text);
+  }
+  
+  h1{
+    margin: 0;
+  }
+  *:focus {
+    outline: none;
+  }
+  
+  ::placeholder {
+    font-weight: 400;
+  }
+  
+  a.nuxt-link-exact-active {
+    border: 2px solid var(--green);
+  }
+  
+  a.nuxt-link {
+    border: none;
+  }
+  
+  button {
+    cursor: pointer;
+    border: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: var(--black_text);
+  }
+
+  input[type=checkbox][disabled]:checked {
+    filter: invert(1)  brightness(4);
+  }
+
+  input {
+    // margin-top: 0.1rem;
+    background-color: var(--bg);
+    border: 0.08rem solid var(--bgProcess);
+    border-radius: 0.3rem;
+    padding: 0.3rem;
+  }
+
+  input:focus {
+    border: 0.11rem solid var(--green_base);
+  }
+
+  input[type=text]{
+    color: var(--black_text);
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
