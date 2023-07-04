@@ -1,47 +1,62 @@
 <template>
-  <div class="container">
-    <h2>Quiz Concluído!</h2>
-    <div v-if="score > 1"></div>
-    <img
-      v-if="score > 1"
-      src="../../assets/public/winners-animate.svg"
-      alt=""
-      srcset=""
-      class="imgWinner"
-    />
+  <div class="containerResultado">
+    <div class="containerAprovado" v-if="scoreFinal > 2">
+      <h2 class="menssageResult">
+        Parabéns Fulano <br />
+        Sua Pontuação é {{ scoreFinal }}
+      </h2>
+      <img
+        src="../../assets/public/winners-animate.svg"
+        alt=""
+        class="imgWinner"
+      />
+    </div>
 
-    <img
-      v-else
-      src="../../assets/public/animate.svg"
-      alt=""
-      srcset=""
-      class="imgWinner"
-    />
-    <h2>
-      Parabens Fulano <br />
-      Sua Pontuação é {{ scoreFinal }} 
-    </h2>
+    <div class="containerReprovado" v-else>
+      <h2 class="menssageResult">
+        Infelizmente não foi dessa vez <br />
+        Sua Pontuação é {{ scoreFinal }}
+      </h2>
+      <img
+        src="../../assets/public/animate.svg"
+        alt=""
+        class="imgWinner"
+      />
+    </div>
 
-    <nuxt-link to="/">Refazer</nuxt-link>
+    <ButtonTest title="Voltar" />
   </div>
 </template>
 
-<script lang="js">
-import Vue from 'vue'
-export default Vue.extend({
-    data(){
-        return{
-            scoreFinal:Number
-        }
-    }
-})
+<script>
+export default {
+  props: {
+    scoreFinal: Number
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-.container {
+<style scoped lang="scss">
+.containerResultado {
   width: 80%;
-  display: grid;
-  
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  align-items: center;
+
+  .containerReprovado,
+  .containerAprovado {
+    display: grid;
+    place-items: center;
+    height: 50%;
+
+    .menssageResult {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      padding-bottom: 2rem;
+    }
+  }
 
   .imgWinner {
     height: 16rem;
