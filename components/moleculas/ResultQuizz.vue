@@ -1,9 +1,9 @@
 <template>
   <div class="containerResultado">
-    <div class="containerAprovado" v-if="scoreFinal > 2">
+    <div class="containerAprovado" v-if="scoreFinal === true">
       <h2 class="menssageResult">
         Parabéns Fulano <br />
-        Sua Pontuação é {{ scoreFinal }}
+        <!-- Seu desempenho foi de {{ percentual }} % -->
       </h2>
       <img
         src="../../assets/public/winners-animate.svg"
@@ -15,7 +15,7 @@
     <div class="containerReprovado" v-else>
       <h2 class="menssageResult">
         Infelizmente não foi dessa vez <br />
-        Sua Pontuação é {{ scoreFinal }}
+        <!-- Seu desempenho foi de {{ percentual }} % -->
       </h2>
       <img
         src="../../assets/public/animate.svg"
@@ -31,7 +31,8 @@
 <script>
 export default {
   props: {
-    scoreFinal: Number
+    scoreFinal: Number,
+    percentual: Number,
   }
 }
 </script>

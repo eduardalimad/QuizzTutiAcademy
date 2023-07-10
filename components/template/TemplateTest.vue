@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <header class="div1">
+    <header class="containerHeader">
       <Time
         ref="timer"
         @timer-end="timesOver"
@@ -8,114 +8,104 @@
         v-show="!quizCompleted"
       />
     </header>
-    <main v-if="!quizCompleted" class="containerMain">
-      <div class="cardQuestion">
-        <h3 class="enunciado">
-          {{ questions[currentQuestionIndex].question }}
-        </h3>
-      </div>
 
-      <div class="containerCardQuestion">
-        <label
-          class="cardAwser"
-          v-for="(option, index) in questions[currentQuestionIndex].options"
-          :key="index"
-        >
-          <input type="radio" v-model="selectedOption" :value="index" />
-          {{ option }}
-        </label>
+    <main v-if="!quizCompleted" class="containerMain">
+      <h3 class="cardQuestion" v-if="listQuizz[currentQuestionIndex]">
+        {{ listQuizz[currentQuestionIndex].titulo_pergunta }}
+      </h3>
+
+      <div class="cardAlternatives">
+        <CardQuestion
+          ref="controlNextQuestion"
+          :dataQ="listQuizz[currentQuestionIndex]"
+          @respostaEnviada="nextQuestion"
+          @watchValue="validarEmit"
+        />
       </div>
-      <div v-show="!quizCompleted" class="containerButton">
-        <div class="cardIndexQuestion">
-          Questão {{ currentQuestionIndex + 1 }} de {{ questions.length }}
-        </div>
-        <ButtonTest @click.native="nextQuestion" title="Próxima Pergunta" />
+      <div v-show="!quizCompleted" class="containerButtons">
+        <section class="indexQuestion">
+          Questão {{ currentQuestionIndex + 1 }} de {{ listQuizz.length }}
+        </section>
       </div>
     </main>
 
     <main v-else class="containerResult">
-      <ResultQuizz :scoreFinal="score" />
+      <ResultQuizz scoreFinal="score" :percentual="taxaDeAprovacao" />
     </main>
   </div>
 </template>
-<script>
+<script >
+import http from "../../service/test/index";
+
 export default {
   name: "NuxtTutorial",
 
   data() {
     return {
-      questions: [
-        {
-          question: "Qual é a capital da França?",
-          options: ["Londres", "Paris", "Madri", "Roma"],
-          answer: 1,
-        },
-        {
-          question: "Quem pintou a Mona Lisa?",
-          options: [
-            "Pablo Picasso",
-            "Leonardo da Vinci",
-            "Vincent van Gogh",
-            "Michelangelo",
-          ],
-          answer: 1,
-        },
-        {
-          question: "1. Assinale a sintaxe errada de uso da fórmula soma",
-          options: [
-            "=SOMA(A2:E2)",
-            "=SOMA(A2:C2)+SOMA(D2:E2)",
-            "=SOMA(A2,B2,C2,D2,E2)",
-            "=SOMA(A5;E5)",
-          ],
-          answer: 0,
-        },
-      ],
       currentQuestionIndex: 0,
-      selectedOption: null,
       quizCompleted: false,
-      score: 0,
+      listQuizz: {},
+      score: Boolean,
+      taxaDeAprovacao: Number,
+      respostaSelecionada: "",
+      
     };
   },
 
+  mounted() {
+    http.ListQuestions().then((response) => {
+      // preciso do param id_aluno que deve vir do tutiAcademy
+      this.listQuizz = response.data.alternatives;
+      const newAsk = {
+        id_course: response.data.id_course,
+        id_module: response.data.id_module,
+        id_aluno: 1805,
+      };
+
+      this.$store.commit("saveQuestion", newAsk);
+    });
+  },
   methods: {
-    nextQuestion() {
-      if (this.selectedOption !== null) {
-        this.checkAnswer();
-        this.currentQuestionIndex++;
-      }
-
-      if (this.currentQuestionIndex <= this.questions.length - 1) {
-        this.selectedOption = null;
-        this.$refs.timer.startTimer();
-      } else if (this.currentQuestionIndex === this.questions.length) {
-        this.quizCompleted = true;
-      }
+    validarEmit(payload) {
+      this.respostaSelecionada = payload.newValue;
     },
-    checkAnswer() {
-      const currentQuestion = this.questions[this.currentQuestionIndex];
-
-      if (this.selectedOption === currentQuestion.answer) {
-        this.score++;
+    async nextQuestion() {
+      if (this.respostaSelecionada != "") {
+        this.currentQuestionIndex++;
+        this.$refs.timer.startTimer();
+      }
+      if (this.currentQuestionIndex <= this.listQuizz.length - 1) {
+        this.$refs.timer.startTimer();
+        
+      } else if (this.currentQuestionIndex === this.listQuizz.length) {
+        console.log("ok");
+        // await this.sendResponese();
+        this.quizCompleted = true;
       }
     },
 
     timesOver() {
-      if (this.selectedOption == null) {
-        this.currentQuestionIndex++;
+      if (this.resposta == null) {
+        this.$refs.controlNextQuestion.adicionarQuestionAnswered();
         this.$refs.timer.startTimer();
       }
-      if (this.selectedOption) {
-        this.checkAnswer();
-        this.currentQuestionIndex++;
+      if (this.currentQuestionIndex <= this.listQuizz.length - 1) {
+        this.selectedOption = null;
         this.$refs.timer.startTimer();
       }
-      if (
-        this.selectedOption == null &&
-        this.currentQuestionIndex === this.questions.length
-      ) {
-        this.quizCompleted = true;
-      }
+    },
+
+    async sendResponese() {
+      await http
+        .SendQuestion(this.$store.state.idQuestion)
+        .then((res) => {
+          // console.log("Resposta do backend:", res.data.percentual);
+          this.score = res.data.is_aproved;
+          this.taxaDeAprovacao = res.data.percentual;
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar a solicitação:", error);
+        });
     },
   },
 };
@@ -141,7 +131,7 @@ export default {
     border-radius: 0.2rem;
     background-color: rgb(253, 253, 253);
     grid-column: 4 / span 6;
-    min-height: 30em;
+    min-height: 32em;
     align-content: center;
     box-shadow: 3px 3px 3px 2px rgba(0, 0, 0, 0.2);
   }
@@ -149,20 +139,15 @@ export default {
     @extend .containerMain;
   }
 
-  .containerButton {
-    width: 80%;
+  .containerButtons {
     display: flex;
     justify-content: space-between;
     border-top: solid 1px #0000;
+    background-color: transparent;
   }
-  .cardIndexQuestion {
+  .indexQuestion {
     width: 8rem;
-    background-color: #fff;
-    /* border-radius: 7px; */
-    display: flex;
-    justify-content: flex-start;
     border-bottom: solid 1px #37c237;
-    align-items: center;
   }
   .cardQuestion {
     width: 80%;
@@ -170,52 +155,25 @@ export default {
     display: flex;
     justify-content: start;
     align-items: center;
-    .enunciado {
-      text-align: center;
-      text-justify: center;
-    }
+    background-color: transparent;
+    text-align: center;
+    text-justify: center;
   }
-  .containerCardQuestion {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .cardAlternatives {
     width: 80%;
-  }
-  .cardAwser {
-    width: 100%;
-    min-height: 58px;
-    display: flex;
-    align-items: center;
-    /* background: rgba(204, 204, 204, 0.4392156863); */
-    border-radius: 5px;
-    padding: 0.8rem;
-    gap: 1rem;
-    border: solid 1px #37c237;
-    box-shadow: 2px 2px 2px 1px rgba(117, 116, 116, 0.2);
-
-    &:hover {
-      background: rgba(214, 207, 207, 0.439);
-      border: none;
-      cursor: pointer;
-      box-shadow: 3px 3px 3px 2px rgba(0, 0, 0, 0.2);
-    }
-  }
-  .imgWinner {
-    height: 16rem;
-    margin: auto;
+    background-color: transparent;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .container{
-   grid-column-gap: 0 !important;
+  .container {
+    grid-column-gap: 0 !important;
   }
-  .containerMain, 
-  .containerResult{
-    grid-column: 2/span 10!important;
+  .containerMain,
+  .containerResult {
+    grid-column: 2 / span 10 !important;
     min-height: 32em !important;
     gap: 1rem !important;
   }
-  
 }
 </style>

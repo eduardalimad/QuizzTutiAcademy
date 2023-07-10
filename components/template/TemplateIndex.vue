@@ -1,17 +1,20 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2 class="title">
-        Você está iniciando seu teste de <br />
+      <h2 class="text">
+        Avaliação <br />
         5`s Aplicado
       </h2>
       <div class="orietacoes">
-        <h5>Orientações</h5>
-        <li>Você terá 5 minutos pra cada pergunta</li>
-        <li>Selecione apenas uma resposta a cada pergunta</li>
-        <li>Ao final da sua prova click no botão salvar Avalição</li>
-        <nuxt-link to="/avaliacao" class="button">Iniciar</nuxt-link>
-      
+        <span class="textRegras">Regras</span>
+        <li>1. Cada questão dura <span>5 Minutos</span></li>
+        <li>2. Ao selecionar uma questão, não poderá ser revertido.</li>
+        <nuxt-link  to="/avaliacao">
+        <button class="button">
+          Iniciar
+        </button>
+          </nuxt-link
+        >
       </div>
       <img
         src="../../assets//public/animate.svg"
@@ -30,7 +33,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  background: #2fc987;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -41,25 +43,36 @@ export default {
     background: white;
     width: 60%;
     height: 30rem;
-    border-radius: 1em;
+    border-radius: 0.313rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     justify-items: center;
-    box-shadow: 3px 3px 3px 2px rgba(0, 0, 0, 0.2);
-    .title {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    .text {
       grid-area: 1 / 1 / 2 / 3;
       text-align: center;
-      padding: 2.5rem;
+      padding: 1rem;
+      font-weight: 600;
+    }
+    .textRegras {
+      font-size: 20px;
+      font-weight: 600;
     }
     .orietacoes {
       padding-left: 3rem;
       grid-area: 2/1/3/2;
       display: grid;
       align-items: center;
+      gap: 0.5rem;
       li {
         list-style: none;
         text-decoration: center;
+        font-size: 17px;
+        span {
+          color: #44d163;
+          font-weight: 600;
+        }
       }
     }
 
@@ -68,7 +81,7 @@ export default {
       grid-area: 2 / 2 / 3 / 3;
     }
     .button {
-      width: 8rem;
+      width: 12rem;
       height: 2.2rem;
       border-radius: 0.2rem;
       background: #095169;
@@ -78,19 +91,20 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-top: 3rem;
     }
   }
 }
-@media screen and (max-width: 600px) {
-  .card{
+@media screen and (max-width: 768px) {
+  .card {
     grid-template-columns: repeat(1, 1fr) !important;
-
+    width: 80% !important;
   }
-  .orietacoes, .title{
-      padding: 2rem !important;
-
+  .orietacoes,
+  .title {
+    padding: 2rem !important;
   }
-  .animateTeste{
+  .animateTeste {
     display: none !important;
   }
 }

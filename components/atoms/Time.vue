@@ -8,9 +8,9 @@
 export default {
   data() {
     return {
-      time: 300,
+      time: 3000,
       intervalId: null,
-      quizzComplete:Boolean,
+  
     };
   },
   props: {
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     startTimer() {
-      this.time = 300;
+      this.time = 3000;
     },
   },
 
