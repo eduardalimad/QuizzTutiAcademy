@@ -52,17 +52,14 @@ export default {
     };
   },
 
-  mounted() {
-    http.ListQuestions().then((response) => {
+  async fetch() {
+    const id = this.$store.state.idQuestion.id_course
+    const id_module = this.$store.state.idQuestion.id_module
+    console.log(id);
+      await http.ListQuestions(id,id_module).then((response) => {
       // preciso do param id_aluno que deve vir do tutiAcademy
       this.listQuizz = response.data.alternatives;
-      const newAsk = {
-        id_course: response.data.id_course,
-        id_module: response.data.id_module,
-        id_aluno: 1805,
-      };
-
-      this.$store.commit("saveQuestion", newAsk);
+      
     });
   },
   methods: {

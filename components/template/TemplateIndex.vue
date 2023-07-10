@@ -23,13 +23,53 @@
         class="animateTeste"
       />
     </div>
+s
   </div>
 </template>
     
-    <script>
+<script>
+import Cookies from "js-cookie"
 export default {
   name: "NuxtTutorial",
+  data(){
+    return{
+      id_course: Number,
+      id_modulo: Number,
+    }
+  },
+  mounted(){
+    if (this.$route.query){
+      const token = this.$route.query
+      Cookies.set('token', token.token)
+        this.id_course = this.$route.query.id_course
+        this.id_modulo = this.$route.query.id_modulo
+        console.log(token);
+
+        const newAsk = {
+        id_course: this.$route.query.id_course,
+        id_module: this.$route.query.id_modulo,
+      };
+      this.$store.commit("saveQuestion", newAsk);
+    }
+    else{
+      alert('error')
+    }
+  },
+  // created() {
+  //   http.ListQuestions(this.id_course,  this.id_modulo).then((response) => {
+  //     this.listQuizz = response.data.alternatives;
+  //     const newAsk = {
+  //       id_course: this.id_course,
+  //       id_module: this.id_modulo,
+  //     };
+
+  //     this.$store.commit("saveQuestion", newAsk);
+  //   });
+  // },
+  
 };
+
+  
 </script>
 <style lang="scss" scoped>
 .container {

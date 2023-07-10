@@ -1,8 +1,8 @@
 import { http } from "../config/index";
 
 export default {
-    ListQuestions: async () => {
-        return await http.get(`questions/1/1/1805`);
+    ListQuestions: async (id_course,id_modulo) => {
+        return await http.get(`questions/${id_course}/${id_modulo}`);
     },
     SendQuestion: async (data) => {
         return await http.post(`questions`, data)

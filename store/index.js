@@ -2,7 +2,6 @@ export const state = () => ({
     idQuestion: {
       id_course: 0,
       id_module: 0,
-      id_aluno: 0,
       questionsAnswered: [],
     },
   });
