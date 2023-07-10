@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="containerTime">
     <h2 style="color:#ffff">{{ formatTime }}</h2>
+    <Loader/>
+
   </div>
 </template>
 
@@ -8,7 +10,7 @@
 export default {
   data() {
     return {
-      time: 3000,
+      time: 300,
       intervalId: null,
   
     };
@@ -42,7 +44,7 @@ export default {
   },
   methods: {
     startTimer() {
-      this.time = 3000;
+      this.time = 300;
     },
   },
 
@@ -57,3 +59,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.containerTime{
+  display: flex;
+}
+</style>

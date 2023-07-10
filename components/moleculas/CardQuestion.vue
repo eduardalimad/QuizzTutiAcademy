@@ -90,7 +90,7 @@ export default Vue.extend({
 }
 .cardAwser {
   width: 100%;
-  min-height: 58px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   /* background: rgba(204, 204, 204, 0.4392156863); */

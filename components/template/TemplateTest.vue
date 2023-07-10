@@ -117,11 +117,10 @@ export default {
   height: 100vh;
   display: grid;
   grid-template: 1fr / repeat(12, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 2em;
+  grid-template-rows: 3em 1fr;
   align-items: center;
   header {
-    grid-column: 11 / span 2;
+    grid-column: 10/ span 2;
   }
 
   .containerMain {
@@ -151,7 +150,7 @@ export default {
   }
   .cardQuestion {
     width: 80%;
-    height: 4rem;
+    min-height: 4rem;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -164,16 +163,23 @@ export default {
     background-color: transparent;
   }
 }
-
+@media screen and (max-width: 768px) {
+  .containerMain {
+    grid-column: 3/span 8 !important;
+}
+}
 @media screen and (max-width: 600px) {
   .container {
     grid-column-gap: 0 !important;
   }
   .containerMain,
   .containerResult {
-    grid-column: 2 / span 10 !important;
+    grid-column: 2/span 10 !important;
     min-height: 32em !important;
     gap: 1rem !important;
+  }
+  header{
+    grid-column: 6/span 9 !important;
   }
 }
 </style>
